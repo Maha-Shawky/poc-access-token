@@ -63,6 +63,9 @@ class TokenManager {
             return null;
 
         const getMin = (arr, propertyName) => {
+            if (arr.length === 1)
+                return arr[0];
+
             arr.reduce((prev, cur) => {
                 return prev[propertyName] < cur[propertyName] ? prev : cur;
             })

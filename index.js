@@ -1,6 +1,6 @@
 const callsWriter = require('./src/Utils/callsWriter')
 const FaceBookAPI = require('./src/FaceBookAPI');
-const { TokenManager, CallType } = require('./src/TokenManager');
+const { TokenManager, ConsumptionType } = require('./src/TokenManager');
 const accessTokens = require('./accessTokens.json');
 
 /**
@@ -47,12 +47,12 @@ checkIfLimitedTokenReleased = async() => {
     }
 }
 
-continuosCallFBookAndLog = async(url, fileName, saveDataInFile) => {
+continuosCallFBookAndLog = async(url, consumptionType, fileName, saveDataInFile) => {
     try {
         let token = {}
         do {
 
-            token = await fbApi.call(url);
+            token = await fbApi.call(url, consumptionType);
             const { accessToken, ...props } = token;
             console.log(JSON.stringify(props));
 
@@ -75,7 +75,7 @@ continuosCallFBookAndLog = async(url, fileName, saveDataInFile) => {
     await checkIfLimitedTokenReleased();
 
     console.log('Start crawling #############');
-    await continuosCallFBookAndLog(slowCallUrl, 'results.json', false);
+    await continuosCallFBookAndLog(slowCallUrl, ConsumptionType.Time, 'results.json', false);
 
 })()
 
