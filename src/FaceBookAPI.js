@@ -12,14 +12,14 @@ class FaceBookAPI {
         if (!token)
             Promise.reject('No available tokens');
 
-        return this.callByAccessToken(url, token.accessToken, consumptionType);
+        return this.callByAccessToken(url, token.accessToken);
     }
 
-    callByAccessToken(url, accessToken, consumptionType) {
+    callByAccessToken(url, accessToken) {
 
         return new Promise((resolve, reject) => {
 
-            https.get(`${url}${accessToken}`, (res) => {
+            https.get(`${url}access_token=${accessToken}`, (res) => {
 
                 const usage = JSON.parse(res.headers['x-app-usage']);
                 const tokenInfo = {
@@ -30,8 +30,8 @@ class FaceBookAPI {
                     lastUpdated: new Date()
                 }
 
-                this.tokenManager.upsertToken(accessToken, tokenInfo);
-                resolve(tokenInfo);
+                const newToken = this.tokenManager.upsertToken(accessToken, tokenInfo);
+                resolve(newToken);
             })
         })
     }

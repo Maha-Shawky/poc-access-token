@@ -10,19 +10,28 @@ class TokenManager {
         this.tokens = [];
     }
 
+    addNewToken(accessToken, info) {
+        let token = {
+            id: this.tokens.length,
+            accessToken,
+            call_count: 0,
+            total_cputime: 0,
+            total_time: 0,
+            code: 200
+        }
+        token = Object.assign(token, info);
+        this.tokens.push(token);
+
+        return token;
+
+    }
+
     upsertToken(accessToken, batch) {
         let token = this.tokens.filter(t => t.accessToken === accessToken)[0];
-        if (!token) {
-            token = {
-                accessToken,
-                call_count: 0,
-                total_cputime: 0,
-                total_time: 0,
-                code: 200
-            }
-        }
+        if (!token)
+            return this.addNewToken(accessToken, batch);
 
-        token = {...token, ...batch };
+        token = Object.assign(token, batch);
         return token;
     }
 
