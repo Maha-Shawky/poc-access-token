@@ -11,13 +11,16 @@ class TokenManager {
     }
 
     addNewToken(accessToken) {
-        this.tokens.push({
+        const token = {
             accessToken,
             call_count: 0,
             total_cputime: 0,
             total_time: 0,
             code: 200
-        })
+        }
+
+        this.tokens.push(token)
+        return token;
     }
 
     updateToken(accessToken, batch) {
@@ -26,6 +29,7 @@ class TokenManager {
             throw new Error('token not exist');
 
         token = {...token, ...batch };
+        return token;
     }
 
     getUnAvailableToken() {
@@ -49,24 +53,25 @@ class TokenManager {
         }
 
         const availableToken = this.getAvailableToken();
-        let lowCallsToken, lowCpuToken, lowTimeToken;
 
         if (ConsumptionType.Calls === callType) {
-            lowCallsToken = getMin(availableToken, 'call_count');
-            return lowCallsToken
+            return getMin(availableToken, 'call_count');
         }
 
         if (ConsumptionType.CPU === callType) {
-            lowCpuToken = getMin(availableToken, 'total_cputime');
-            return lowCpuToken
+            return getMin(availableToken, 'total_cputime');
         }
 
         if (ConsumptionType.Time === callType) {
-            lowTimeToken = getMin(availableToken, 'total_time');
-            return lowTimeToken
+            return getMin(availableToken, 'total_time');
         }
 
-        return getMin([lowCallsToken, lowCpuToken, lowTimeToken]);
+        const lowestConsumedToken = availableToken.reduce((prev, cur) => {
+            return Math.max(prev.call_count, prev.total_cputime, prev.total_time) <
+                Math.max(cur.call_count, cur.total_cputime, cur.total_time) ? prev : cur;
+        })
+
+        return lowestConsumedToken;
     }
 }
 
