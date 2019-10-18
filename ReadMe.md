@@ -14,7 +14,7 @@ None of its (call_count, total_cputime, total_time) reached 100 %  check [Rate i
 ## Most important function:
 - *TokenManager::findLowerConsumedToken*: which fnd min valid token either based on one of usage types or the one has min of all types,
 
-i.e. It could be used to find valid token with lowest "total_time", or token with lowest "total_time" or lowest combination of the 3 metrics.
+i.e. It could be used to find valid token with lowest "call_count", or token with lowest "total_time" or lowest combination of the 3 metrics.
 
 - *index::checkIfLimitedTokenReleased*: which could be used periodically to ping by rate limited tokens to check if their usage decreased and can be reused or not.
 
