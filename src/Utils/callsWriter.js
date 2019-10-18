@@ -58,7 +58,7 @@ module.exports = {
             total_cputime: 20,
             total_time: 30,
             code: 200,
-            date: new Date()
+            date: new Date().toISOString()
         }
 
         for (i = 0; i < 10; i++) {

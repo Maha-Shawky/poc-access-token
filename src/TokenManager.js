@@ -17,7 +17,8 @@ class TokenManager {
             call_count: 0,
             total_cputime: 0,
             total_time: 0,
-            code: 200
+            code: 200,
+            lastUsed: new Date().toISOString()
         }
         token = Object.assign(token, info);
         this.tokens.push(token);
@@ -35,19 +36,24 @@ class TokenManager {
         return token;
     }
 
-    getTokenByStatusCode(code) {
+    //return if 
+    getTokenByStatusCode(code, lastUpdatedInMinutes) {
         return this.tokens.filter(t => {
-            return t.code === code;
-        })
-    }
+            if (t.code !== code)
+                return false;
 
-    getValidTokens() {
-        return this.getTokenByStatusCode(200);
+            if (lastUpdatedInMinutes) {
+                const timeDiff = new Date() - new Date(t.lastUsed);
+                return timeDiff >= lastUpdatedInMinutes * 60000;
+            }
+
+            return true;
+        })
     }
 
     findLowerConsumedToken(callType) {
 
-        const validTokens = this.getValidTokens();
+        const validTokens = this.getTokenByStatusCode(200);
         if (!validTokens || validTokens.length === 0)
             return null;
 

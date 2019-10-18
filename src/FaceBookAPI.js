@@ -27,7 +27,7 @@ class FaceBookAPI {
                     total_cputime: usage.total_cputime,
                     total_time: usage.total_time,
                     code: res.statusCode,
-                    lastUpdated: new Date()
+                    lastUsed: new Date().toISOString()
                 }
 
                 const newToken = this.tokenManager.upsertToken(accessToken, tokenInfo);
