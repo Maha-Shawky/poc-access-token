@@ -14,14 +14,17 @@ class FaceBookAPI {
                 reject('No available tokens');
 
             https.get(`${url}${token.accessToken}`, (res) => {
+
                 const usage = res.headers['x-app-usage'];
                 const tokenInfo = {
                     call_count: usage.call_count,
                     total_cputime: usage.total_cputime,
                     total_time: usage.total_time,
-                    code: 200
+                    code: res.statusCod,
+                    lastUpdate: new Date()
                 }
 
+                this.tokenManager.updateToken(token.accessToken, tokenInfo);
                 resolve(tokenInfo);
             })
         })
