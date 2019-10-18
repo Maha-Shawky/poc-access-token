@@ -24,7 +24,7 @@ class TokenManager {
     }
 
     updateToken(accessToken, batch) {
-        const token = this.tokens.filter(t => t.accessToken === accessToken)[0];
+        let token = this.tokens.filter(t => t.accessToken === accessToken)[0];
         if (!token)
             throw new Error('token not exist');
 
