@@ -12,7 +12,7 @@ class FaceBookAPI {
         if (!token)
             Promise.reject('No available tokens');
 
-        return callByAccessToken(url, token.accessToken, consumptionType);
+        return this.callByAccessToken(url, token.accessToken, consumptionType);
     }
 
     callByAccessToken(url, accessToken, consumptionType) {

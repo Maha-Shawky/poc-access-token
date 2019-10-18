@@ -44,11 +44,9 @@ setUp = async() => {
         const accessToken = accessTokens[i];
         await fbApi.callByAccessToken('https://graph.facebook.com/v4.0/me?fields=id,name&', accessToken)
     }
-
 }
 
 (async() => {
-
     await setUp();
 
     const check = 2;
