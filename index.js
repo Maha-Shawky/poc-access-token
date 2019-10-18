@@ -19,15 +19,11 @@ const { TokenManager, CallType } = require('./src/TokenManager');
 const tokenManager = new TokenManager();
 const fbApi = new FaceBookAPI({ tokenManager })
 
-
-
-
-
 continuosCallFBookAndLog = async(url, fileName, writeInfile) => {
 
     while (true) {
         try {
-            const res = await fbApi.callFb(url);
+            const res = await fbApi.call(url);
 
             if (writeInfile)
                 await callsWriter.appendToJsonFile(fileName, res);
@@ -44,7 +40,7 @@ continuosCallFBookAndLog = async(url, fileName, writeInfile) => {
     tokenManager.addNewToken('EAAYgrrV0uxYBABsX93y8JXakqdYtHfEDNVnp04JcaJIvAOKXmCP1gSVZCad57H8jlfknJCu7MIZAoZCpgsqsyZCQvZBP9uR2bvJnKsko7lLvQchBfbLWQfHHJzXDkEF4tbpZCLCCTnuHa5i1JfPNEv0dfuezyCIEvB0Cqg4Ce8zGDW0wXmeyNFXAehwczxqxYZD');
     tokenManager.addNewToken('EAALDOhsLbBIBACZCD3tjCjTb3tEVFNthGA5u7jsn6n1j1lvHd7jUc5NJVhnHtMuukIn2jA8byK4YzdtI9JKfac0zRHnmPmg2kn35zSUZAj4LA9R92wUHLgb3h49G3Gdj6tSlp014aeZAMlMSRnvpbGYZBPOBY2rGwDehSrl8ZA9w235QUB4JU49t8ebpaaJMIZAC34fiaXaQZDZD');
 
-    const check = 1;
+    const check = 2;
     switch (check) {
         case 0:
             {
@@ -61,7 +57,7 @@ continuosCallFBookAndLog = async(url, fileName, writeInfile) => {
         case 2:
             {
                 const url = `https://graph.facebook.com/v4.0/me?fields=id,name&`;
-                await fbApi.callFb(url)
+                await fbApi.call(url)
                 break;
             }
     }

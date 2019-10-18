@@ -11,7 +11,7 @@ class TokenManager {
     }
 
     addNewToken(accessToken) {
-        tokens.push({
+        this.tokens.push({
             accessToken,
             call_count: 0,
             total_cputime: 0,
@@ -48,7 +48,7 @@ class TokenManager {
             })
         }
 
-        const availableToken = getAvailableToken();
+        const availableToken = this.getAvailableToken();
         let lowCallsToken, lowCpuToken, lowTimeToken;
 
         if (ConsumptionType.Calls === callType) {
