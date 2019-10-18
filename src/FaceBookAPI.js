@@ -15,13 +15,13 @@ class FaceBookAPI {
 
             https.get(`${url}${token.accessToken}`, (res) => {
 
-                const usage = res.headers['x-app-usage'];
+                const usage = JSON.parse(res.headers['x-app-usage']);
                 const tokenInfo = {
                     call_count: usage.call_count,
                     total_cputime: usage.total_cputime,
                     total_time: usage.total_time,
-                    code: res.statusCod,
-                    lastUpdate: new Date()
+                    code: res.statusCode,
+                    lastUpdated: new Date()
                 }
 
                 this.tokenManager.updateToken(token.accessToken, tokenInfo);

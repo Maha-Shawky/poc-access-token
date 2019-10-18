@@ -10,8 +10,8 @@ class TokenManager {
         this.tokens = [];
     }
 
-    addNewToken(accessToken) {
-        const token = {
+    addNewToken(accessToken, batch) {
+        let token = {
             accessToken,
             call_count: 0,
             total_cputime: 0,
@@ -19,6 +19,7 @@ class TokenManager {
             code: 200
         }
 
+        token = {...token, ...batch };
         this.tokens.push(token)
         return token;
     }
@@ -32,16 +33,14 @@ class TokenManager {
         return token;
     }
 
-    getUnAvailableToken() {
+    getTokenByStatusCode(code) {
         return this.tokens.filter(t => {
-            return t.call_count >= 100 || t.total_cputime >= 100 || t.total_time >= 100;
+            return t.code === code;
         })
     }
 
     getAvailableToken() {
-        return this.tokens.filter(t => {
-            return t.call_count < 100 && t.total_cputime < 100 && t.total_time < 100;
-        })
+        return this.getTokenByStatusCode(200);
     }
 
     findLowerConsumedToken(callType) {

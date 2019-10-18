@@ -57,7 +57,8 @@ continuosCallFBookAndLog = async(url, fileName, writeInfile) => {
         case 2:
             {
                 const url = `https://graph.facebook.com/v4.0/me?fields=id,name&`;
-                await fbApi.call(url)
+                const tokenInfo = await fbApi.call(url)
+                console.log(tokenInfo);
                 break;
             }
     }
