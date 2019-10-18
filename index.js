@@ -35,7 +35,7 @@ setUp = async() => {
 
 checkIfLimitedTokenReleased = async() => {
 
-    const rateLimited = tokenManager.getTokenByStatusCode(403, 1);
+    const rateLimited = tokenManager.getTokensByLastSuccessfullyCalled(403, 30);
 
     for (i = 0; i < rateLimited.length; i++) {
 
@@ -78,3 +78,9 @@ continuosCallFBookAndLog = async(url, fileName, saveDataInFile) => {
     await continuosCallFBookAndLog(slowCallUrl, 'results.json', false);
 
 })()
+
+
+module.exports = {
+    continuosCallFBookAndLog,
+    checkIfLimitedTokenReleased
+}

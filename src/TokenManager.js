@@ -10,21 +10,24 @@ class TokenManager {
         this.tokens = [];
     }
 
+    setTokenUpdateTime(token) {
+        const now = new Date().toISOString();
+
+        token.lastUsed = now;
+        if (token.code === 200)
+            token.lastSuccessfullyCalled = now;
+    }
     addNewToken(accessToken, info) {
         let token = {
             id: this.tokens.length,
-            accessToken,
-            call_count: 0,
-            total_cputime: 0,
-            total_time: 0,
-            code: 200,
-            lastUsed: new Date().toISOString()
+            accessToken
         }
+
         token = Object.assign(token, info);
+        this.setTokenUpdateTime(token);
         this.tokens.push(token);
 
         return token;
-
     }
 
     upsertToken(accessToken, batch) {
@@ -33,27 +36,29 @@ class TokenManager {
             return this.addNewToken(accessToken, batch);
 
         token = Object.assign(token, batch);
+        this.setTokenUpdateTime(token);
         return token;
     }
 
-    //return if 
-    getTokenByStatusCode(code, lastUpdatedInMinutes) {
-        return this.tokens.filter(t => {
-            if (t.code !== code)
-                return false;
+    getTokensByStatus(code) {
+        return this.tokens.filter(token => token.code === code);
+    }
 
-            if (lastUpdatedInMinutes) {
-                const timeDiff = new Date() - new Date(t.lastUsed);
-                return timeDiff >= lastUpdatedInMinutes * 60000;
-            }
+    getTokensByLastSuccessfullyCalled(code, minutes) {
 
-            return true;
-        })
+        return this.getTokensByStatus(code)
+            .filter(token => {
+                if (!token.lastSuccessfullyCalled)
+                    return true;
+
+                const timeDiff = new Date() - new Date(token.lastSuccessfullyCalled);
+                return timeDiff >= minutes * 60000;
+            })
     }
 
     findLowerConsumedToken(callType) {
 
-        const validTokens = this.getTokenByStatusCode(200);
+        const validTokens = this.getTokensByStatus(200);
         if (!validTokens || validTokens.length === 0)
             return null;
 
