@@ -10,7 +10,7 @@ class FaceBookAPI {
 
         const token = this.tokenManager.findLowerConsumedToken(consumptionType);
         if (!token)
-            Promise.reject('No available tokens');
+            return Promise.reject('No available tokens');
 
         return this.callByAccessToken(url, token.accessToken);
     }
