@@ -32,14 +32,14 @@ class TokenManager {
         })
     }
 
-    getAvailableTokens() {
+    getValidTokens() {
         return this.getTokenByStatusCode(200);
     }
 
     findLowerConsumedToken(callType) {
 
-        const availableTokens = this.getAvailableTokens();
-        if (!availableTokens || availableTokens.length === 0)
+        const validTokens = this.getValidTokens();
+        if (!validTokens || validTokens.length === 0)
             return null;
 
         const getMin = (arr, propertyName) => {
@@ -49,18 +49,18 @@ class TokenManager {
         }
 
         if (ConsumptionType.Calls === callType) {
-            return getMin(availableTokens, 'call_count');
+            return getMin(validTokens, 'call_count');
         }
 
         if (ConsumptionType.CPU === callType) {
-            return getMin(availableTokens, 'total_cputime');
+            return getMin(validTokens, 'total_cputime');
         }
 
         if (ConsumptionType.Time === callType) {
-            return getMin(availableTokens, 'total_time');
+            return getMin(validTokens, 'total_time');
         }
 
-        const lowestConsumedToken = availableTokens.reduce((prev, cur) => {
+        const lowestConsumedToken = validTokens.reduce((prev, cur) => {
             return Math.max(prev.call_count, prev.total_cputime, prev.total_time) <
                 Math.max(cur.call_count, cur.total_cputime, cur.total_time) ? prev : cur;
         })
