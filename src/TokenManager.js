@@ -10,24 +10,17 @@ class TokenManager {
         this.tokens = [];
     }
 
-    addNewToken(accessToken, batch) {
-        let token = {
-            accessToken,
-            call_count: 0,
-            total_cputime: 0,
-            total_time: 0,
-            code: 200
-        }
-
-        token = {...token, ...batch };
-        this.tokens.push(token)
-        return token;
-    }
-
-    updateToken(accessToken, batch) {
+    upsertToken(accessToken, batch) {
         let token = this.tokens.filter(t => t.accessToken === accessToken)[0];
-        if (!token)
-            throw new Error('token not exist');
+        if (!token) {
+            token = {
+                accessToken,
+                call_count: 0,
+                total_cputime: 0,
+                total_time: 0,
+                code: 200
+            }
+        }
 
         token = {...token, ...batch };
         return token;

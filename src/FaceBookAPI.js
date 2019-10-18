@@ -5,15 +5,21 @@ class FaceBookAPI {
         this.tokenManager = deps.tokenManager;
     }
 
+    // Call api by selecting the lowest consumption type
     call(url, consumptionType) {
+
+        const token = this.tokenManager.findLowerConsumedToken(consumptionType);
+        if (!token)
+            Promise.reject('No available tokens');
+
+        return callByAccessToken(url, token.accessToken, consumptionType);
+    }
+
+    callByAccessToken(url, accessToken, consumptionType) {
 
         return new Promise((resolve, reject) => {
 
-            const token = this.tokenManager.findLowerConsumedToken(consumptionType);
-            if (!token)
-                reject('No available tokens');
-
-            https.get(`${url}${token.accessToken}`, (res) => {
+            https.get(`${url}${accessToken}`, (res) => {
 
                 const usage = JSON.parse(res.headers['x-app-usage']);
                 const tokenInfo = {
@@ -24,7 +30,7 @@ class FaceBookAPI {
                     lastUpdated: new Date()
                 }
 
-                this.tokenManager.updateToken(token.accessToken, tokenInfo);
+                this.tokenManager.upsertToken(accessToken, tokenInfo);
                 resolve(tokenInfo);
             })
         })
